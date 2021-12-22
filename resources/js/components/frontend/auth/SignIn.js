@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import swal from 'sweetalert';
 import { useNavigate } from 'react-router-dom';
+import swal from 'sweetalert';
+import axios from 'axios';
+import AuthService from '../../../services/AuthService';
 
 
 function SignIn(){
@@ -26,7 +27,7 @@ function SignIn(){
         }
 
         axios.get('/sanctum/csrf-cookie').then(response => {
-            axios.post(`/api/signin`,data).then(res =>{
+            AuthService.signIn(data).then(res =>{
                 if(res.data.status === 200){
                     localStorage.setItem('auth_token',res.data.token);
                     swal("Success",res.data.message,"success");

@@ -8,6 +8,7 @@ Route::post('signin',[AuthController::class,'signIn']);
 Route::post('signup',[AuthController::class,'signUp']);
 Route::get('post',[PostController::class,'index']);
 Route::get('srchpost/{id}',[PostController::class,'srchPost']);
+Route::get('fetchpost/{categoryname}',[PostController::class,'fetchPostCategory']);
 
 
 Route::middleware(['auth:sanctum'])->group(function () {

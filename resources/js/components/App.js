@@ -1,25 +1,27 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
 import axios from 'axios';
 
-import FrontHeader from '../layouts/frontend/FrontHeader';
-import FrontNavbar from '../layouts/frontend/FrontNavbar';
-import FrontFooter from '../layouts/frontend/FrontFooter';
-import Home from './frontend/Home';
-import PostDetails from './frontend/PostDetails';
-import SignIn from './frontend/auth/SignIn';
-import SignUp from './frontend/auth/SignUp';
+//layouts
+import FrontLayout from './layouts/frontend/FrontLayout';
+import UserLayout from './layouts/userpanel/UserLayout';
 
-import UserNavbar from '../layouts/userpanel/UserNavbar';
-import UserSidebar from '../layouts/userpanel/UserSidebar';
-import UserFooter from '../layouts/userpanel/UserFooter';
-import Dashboard from './userpanel/Dashboard';
-import AddPost from './userpanel/AddPost';
-import Post from './userpanel/Post';
-import UpdatePost from './userpanel/UpdatePost';
+//pages
+const Home = lazy(() => import('./frontend/Home'));
+const PostDetails = lazy(() => import('./frontend/PostDetails'));
+const SignIn = lazy(() => import('./frontend/auth/SignIn'));
+const SignUp = lazy(() => import('./frontend/auth/SignUp'));
+const Category = lazy(() => import('./frontend/Category'));
 
-import Authentication from '../routes/Authentication';
+const Dashboard = lazy(() => import('./userpanel/Dashboard'));
+const AddPost = lazy(() => import('./userpanel/AddPost'));
+const Post = lazy(() => import('./userpanel/Post'));
+const UpdatePost = lazy(() => import('./userpanel/UpdatePost'));
+
+const NotFound = lazy(() => import('./frontend/NotFound'));
+
+import Authentication from '../components/Authentication';
 
 axios.defaults.baseURL = "http://localhost:8000/";
 axios.defaults.headers.post['Content-Type'] = 'application/json';
@@ -32,63 +34,35 @@ axios.interceptors.request.use(function (config){
 })
 
 
-
-
 function App() {
 
-    const FrontLayout = () => (
-        <>
-          <FrontNavbar />
-          <FrontHeader />
-          <main >
-             <Outlet /> 
-          </main>
-          <FrontFooter />
-        </>
-    );
-
-    const UserLayout = () => (
-        <>
-            <div className="sb-nav-fixed">
-                <UserNavbar/>
-                <div id="layoutSidenav">
-                    <div id="layoutSidenav_nav">
-                        <UserSidebar/>
-                    </div>
-                    <div id="layoutSidenav_content">
-                        <main>
-                            <Outlet /> 
-                        </main>
-                        <UserFooter/>
-                    </div>
-                </div>
-            </div>
-        </>
-    );
-
+    
     return (
         <>
             <Router>
-                <Routes>
-                    <Route path="/" element={<FrontLayout />} >
-                        <Route path="/" element={<Home />} />
-                        <Route path=":id" element={<PostDetails />} />
-                        <Route path="/signin" element={<SignIn/>} />
-                        <Route path="/signup" element={<SignUp/>} />
-                    </Route>
-                   
-                    <Route exact path='/' element={<Authentication/>}>
-                        <Route path="/" element={<UserLayout />} >
-                            <Route path="/userdashboard" element= {<Dashboard />}/>
-                            <Route exact path='/addpost' element={<AddPost/>}/>
-                            <Route exact path='/post' element={<Post/>}/>
-                            <Route path="/post/:id" element={<UpdatePost/>} />
+                <Suspense fallback={<div>Please Wait......</div>}>
+                    <Routes>
+                        <Route path="/" element={<FrontLayout />} >
+                            <Route path="/" element={<Home />} />
+                            <Route path=":id" element={<PostDetails />} />
+                            <Route path="category/:categoryname" element={<Category/>} />
+                            <Route path="/signin" element={<SignIn/>} />
+                            <Route path="/signup" element={<SignUp/>} />
                         </Route>
-                    </Route>
+                    
+                        <Route exact path='/' element={<Authentication/>}>
+                            <Route path="/" element={<UserLayout />} >
+                                <Route path="/userdashboard" element= {<Dashboard />}/>
+                                <Route path='/addpost' element={<AddPost/>}/>
+                                <Route path='/post' element={<Post/>}/>
+                                <Route path="post/:id" element={<UpdatePost/>} />
+                            </Route>
+                        </Route>
 
-                    <Route path="*" element={<SignIn />} />
+                        <Route path="*" element={<NotFound />} />
 
-                </Routes>
+                    </Routes>
+                </Suspense>
             </Router>
             
         </>

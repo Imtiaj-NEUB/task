@@ -1,11 +1,10 @@
 import React, { useState,useEffect } from 'react';
+import { useNavigate,useParams } from 'react-router-dom';
 import axios from 'axios';
 import swal from 'sweetalert';
-import { useNavigate,useParams } from 'react-router-dom';
+import PostService from '../../services/PostService';
 
 
-
- 
 function UpdatePost(){
 
     let {id} = useParams();
@@ -18,7 +17,7 @@ function UpdatePost(){
 
     useEffect(() => {
         
-        axios.get(`/api/srchpost/${id}`).then(res=>{
+        PostService.findPost(id).then(res=>{
             if(res.data.status === 200){
                 setEditPost(res.data.post);
             }else if(res.data.status === 504){
@@ -43,7 +42,7 @@ function UpdatePost(){
         e.preventDefault();
 
         const data =postUpdate;
-        axios.put(`/api/update/${id}`,data).then(res =>{
+        PostService.updatePost(id,data).then(res =>{
             if(res.data.status === 200){
                 setError([]);
                 swal("Success",res.data.message,"success");

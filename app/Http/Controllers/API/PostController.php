@@ -37,7 +37,7 @@ class PostController extends Controller
         }else{
             return response()->json([
                 'status' => 504,
-                'message'=> "Not Found",
+                'message'=> "Not found any data",
             ]);
         }
         
@@ -131,5 +131,25 @@ class PostController extends Controller
             ]); 
         }
 
+    }
+
+    public function fetchPostCategory($category){
+
+        $fetch = Post::where('category',$category)->get();
+        if($fetch ){
+
+            return response()->json([
+                'status' => 200,
+                'post'=> $fetch ,
+            ]); 
+
+        }else{
+
+            return response()->json([
+                'status' => 400,
+                'message'=> 'There has no post releated category',
+            ]); 
+
+        }
     }
 }

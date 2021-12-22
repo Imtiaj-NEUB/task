@@ -1,6 +1,8 @@
 import React, { useState,useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import swal from 'sweetalert';
+import PostService from '../../services/PostService';
 
 function PostDetails(){
 
@@ -11,9 +13,11 @@ function PostDetails(){
     const [post,setPost] = useState([]);
 
     useEffect(() => {
-        axios.get(`/api/srchpost/${id}`).then(res=>{
+        PostService.fetchPostDetails(id).then(res=>{
             if(res.data.status === 200){
                 setPost(res.data.post)
+            }else if(res.data.status === 504){
+                swal("Warning",res.data.message);
             }
             setLoading(false);
         });
@@ -31,8 +35,7 @@ function PostDetails(){
                     <h3 className="post-subtitle">{post.description}</h3>
                     <p className="post-meta">
                         Category: {post.category}<br/>
-                        Posted at: {post.created_at }
-                        ;
+                        Posted at: {post.created_at };
                     </p>
                 </div>
             </div>

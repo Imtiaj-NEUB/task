@@ -1,6 +1,4 @@
 import React from 'react';
-import '../../assets/userpanel/css/styles.css';
-import '../../assets/userpanel/js/scripts.js';
 
 function Dashboard(){
     

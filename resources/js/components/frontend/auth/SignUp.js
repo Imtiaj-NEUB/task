@@ -1,7 +1,9 @@
 import React, {  useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import swal from 'sweetalert';
-import { useNavigate } from 'react-router-dom';
+import AuthService from '../../../services/AuthService';
+
 
 function SignUp(){
          
@@ -27,10 +29,10 @@ function SignUp(){
             }
 
             axios.get('/sanctum/csrf-cookie').then(response => {
-                axios.post(`/api/signup`,data).then(res =>{
+                AuthService.signUp(data).then(res =>{
                    if(res.data.status === 200){
                         localStorage.setItem('auth_token',res.data.token);
-                        swal("Success",res.data.message);
+                        swal("Success",res.data.message,"success");
                         navigate('/userdashboard');
 
                    }else{

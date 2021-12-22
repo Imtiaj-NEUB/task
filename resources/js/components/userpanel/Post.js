@@ -1,7 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import swal from 'sweetalert';
+import PostService from '../../services/PostService';
 
 
 function Post(){
@@ -12,7 +12,7 @@ function Post(){
     const [post,setPost] = useState([]);
     
     useEffect(() => {
-        axios.get(`/api/post`).then(res=>{
+        PostService.getAllPosts().then(res=>{
             if(res.data.status === 200){
                 setPost(res.data.post)
             }
@@ -26,7 +26,7 @@ function Post(){
         const thisClicked = e.currentTarget;
         thisClicked.innerText = "Deleting"; 
 
-        axios.delete(`/api/deletepost/${id}`).then(res=>{
+        PostService.deletePost(id).then(res=>{
 
             if(res.data.status === 200){
                 swal("Success",res.data.message,"success");

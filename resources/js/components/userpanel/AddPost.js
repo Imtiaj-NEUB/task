@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import swal from 'sweetalert';
+import PostService from '../../services/PostService';
 
 
 
@@ -31,9 +32,9 @@ function AddPost(){
             }
 
             axios.get('/sanctum/csrf-cookie').then(response => {
-                axios.post(`/api/addpost`,data).then(res =>{
+                PostService.addPost(data).then(res =>{
                    if(res.data.status === 200){
-                        swal("Success",res.data.message);
+                        swal("Success",res.data.message,"success");
                         document.getElementById('ADD_POST').reset();
                         navigate('/post');
 
