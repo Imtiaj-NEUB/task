@@ -84,7 +84,7 @@ class PostController extends Controller
 
     }
 
-    public function addPost(Request $request){
+    public function addPost($userid,Request $request){
 
 
         $validator = Validator::make($request->all(),[
@@ -105,6 +105,7 @@ class PostController extends Controller
             $addPost->title = $request -> input('title');
             $addPost->description = $request -> input('description');
             $addPost->category = $request -> input('category');
+            $addPost->userid = $userid;
             $addPost->save();
             return response()->json([
                 'status' => 200,
@@ -151,5 +152,26 @@ class PostController extends Controller
             ]); 
 
         }
+    }
+
+    public function userPost($userid){
+
+        $fetchPost = Post::where('userid',$userid)->get();
+        if($fetchPost ){
+
+            return response()->json([
+                'status' => 200,
+                'post'=> $fetchPost ,
+            ]); 
+
+        }else{
+
+            return response()->json([
+                'status' => 400,
+                'message'=> 'There has no post',
+            ]); 
+
+        }
+
     }
 }

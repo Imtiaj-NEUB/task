@@ -7,12 +7,12 @@ import PostService from '../../services/PostService';
 function Post(){
 
     let data="";
-
+    const userId = localStorage.getItem('userid');
     const [loading, setLoading] = useState(true);
     const [post,setPost] = useState([]);
     
     useEffect(() => {
-        PostService.getAllPosts().then(res=>{
+        PostService.getUserPosts(userId).then(res=>{
             if(res.data.status === 200){
                 setPost(res.data.post)
             }

@@ -12,7 +12,8 @@ Route::get('fetchpost/{categoryname}',[PostController::class,'fetchPostCategory'
 
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::post('addpost',[PostController::class,'addPost']);
+    Route::get('userpost/{userid}',[PostController::class,'userPost']);
+    Route::post('addpost/{userid}',[PostController::class,'addPost']);
     Route::put('update/{id}',[PostController::class,'update']);
     Route::delete('deletepost/{id}',[PostController::class,'deletePost']);
     Route::post('signout',[AuthController::class,'signOut']);

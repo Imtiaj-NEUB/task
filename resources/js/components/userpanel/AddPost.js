@@ -11,39 +11,40 @@ import PostService from '../../services/PostService';
 function AddPost(){
 
     const navigate = useNavigate();
-        const [postInput,setPost] = useState({
-           title:'',
-           description:'',
-           category:'',
-           error_list: [],
-        });
-       
-        const handleInput =(e) => {
-            e.persist();
-            setPost({...postInput,[e.target.name]: e.target.value });
-        }
+    const userId = localStorage.getItem('userid');
+    const [postInput,setPost] = useState({
+        title:'',
+        description:'',
+        category:'',
+        error_list: [],
+    });
     
-        const postSubmit = (e) => {
-            e.preventDefault();
-            const data ={
-                title:postInput.title,
-                description:postInput.description,
-                category:postInput.category,
-            }
+    const handleInput =(e) => {
+        e.persist();
+        setPost({...postInput,[e.target.name]: e.target.value });
+    }
 
-            axios.get('/sanctum/csrf-cookie').then(response => {
-                PostService.addPost(data).then(res =>{
-                   if(res.data.status === 200){
-                        swal("Success",res.data.message,"success");
-                        document.getElementById('ADD_POST').reset();
-                        navigate('/post');
-
-                   }else{
-                     setPost({...postInput, error_list: res.data.validation_errors});
-                   }
-                });   
-            });
+    const postSubmit = (e) => {
+        e.preventDefault();
+        const data ={
+            title:postInput.title,
+            description:postInput.description,
+            category:postInput.category,
         }
+
+        axios.get('/sanctum/csrf-cookie').then(response => {
+            PostService.addPost(data,userId).then(res =>{
+                if(res.data.status === 200){
+                    swal("Success",res.data.message,"success");
+                    document.getElementById('ADD_POST').reset();
+                    navigate('/post');
+
+                }else{
+                    setPost({...postInput, error_list: res.data.validation_errors});
+                }
+            });   
+        });
+    }
 
     return (
         <div className="container px-4">

@@ -32,6 +32,7 @@ function SignUp(){
                 AuthService.signUp(data).then(res =>{
                    if(res.data.status === 200){
                         localStorage.setItem('auth_token',res.data.token);
+                        localStorage.setItem('userid',res.data.userid);
                         swal("Success",res.data.message,"success");
                         navigate('/userdashboard');
 

@@ -74,6 +74,7 @@ function SignUp() {
       _services_AuthService__WEBPACK_IMPORTED_MODULE_3__["default"].signUp(data).then(function (res) {
         if (res.data.status === 200) {
           localStorage.setItem('auth_token', res.data.token);
+          localStorage.setItem('userid', res.data.userid);
           sweetalert__WEBPACK_IMPORTED_MODULE_2___default()("Success", res.data.message, "success");
           navigate('/userdashboard');
         } else {

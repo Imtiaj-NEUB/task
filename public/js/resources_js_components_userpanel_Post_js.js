@@ -38,6 +38,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function Post() {
   var data = "";
+  var userId = localStorage.getItem('userid');
 
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true),
       _useState2 = _slicedToArray(_useState, 2),
@@ -50,7 +51,7 @@ function Post() {
       setPost = _useState4[1];
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    _services_PostService__WEBPACK_IMPORTED_MODULE_2__["default"].getAllPosts().then(function (res) {
+    _services_PostService__WEBPACK_IMPORTED_MODULE_2__["default"].getUserPosts(userId).then(function (res) {
       if (res.data.status === 200) {
         setPost(res.data.post);
       }
@@ -164,14 +165,17 @@ __webpack_require__.r(__webpack_exports__);
   getAllPosts: function getAllPosts() {
     return axios__WEBPACK_IMPORTED_MODULE_0___default().get("/api/post");
   },
+  getUserPosts: function getUserPosts(userid) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default().get("/api/userpost/".concat(userid));
+  },
   fetchPost: function fetchPost(categoryname) {
     return axios__WEBPACK_IMPORTED_MODULE_0___default().get("/api/fetchpost/".concat(categoryname));
   },
   fetchPostDetails: function fetchPostDetails(id) {
     return axios__WEBPACK_IMPORTED_MODULE_0___default().get("/api/srchpost/".concat(id));
   },
-  addPost: function addPost(data) {
-    return axios__WEBPACK_IMPORTED_MODULE_0___default().post("/api/addpost", data);
+  addPost: function addPost(data, userid) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default().post("/api/addpost/".concat(userid), data);
   },
   findPost: function findPost(id) {
     return axios__WEBPACK_IMPORTED_MODULE_0___default().get("/api/srchpost/".concat(id));
